@@ -13,6 +13,7 @@ defmodule Discuss.Router do
     plug :accepts, ["json"]
   end
 
+  # scope = adding namespaces to your url paths i.e. scope "/hello" with get "/alex" -> url = localhost:4000/hello/alex
   scope "/", Discuss do
     pipe_through :browser # Use the default browser stack
 
@@ -24,6 +25,13 @@ defmodule Discuss.Router do
     #delete "/topics/:id", TopicController, :delete
     # ---> resources helper - routes are generated like above (following common restful conventions)
     resources "/", TopicController  #  please use in that case just "/"
+  end
+
+  scope "/auth", Discuss do
+    pipe_through :browser # Use the default browser stack
+    # ':provider' is placeholder for different providers like facebook, githib, google etc.
+    get "/:provider", AuthController, :request # request func is defined by ueberauth itself
+    get "/:provider/callback", AuthController, :callback
   end
 
   # Other scopes may use custom stacks.
